@@ -1,0 +1,33 @@
+/**
+ * Courier_Style CSS
+ *
+ * @link      	http://therefinery.co.nz
+ * @copyright 	Copyright (c) 2017 The Refinery
+ * @license 	https://github.com/therefinerynz/courier/blob/master/LICENSE.txt
+ * @author 		The Refinery
+ * @package 	Courier
+ * @since 		1.0.0
+ */
+.courier-modal__wrapper {
+	box-sizing: border-box;
+	padding: 10% 5% 5%;
+}
+
+.courier-modal__header {
+	font-size: 21px;
+}
+
+.courier-toolbar--right {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.body h2 {
+	padding-top: 10px;
+}
+
+textarea[name*="settings[availableEvents]"],
+.textarea-code {
+	font-family: monospace;
+}

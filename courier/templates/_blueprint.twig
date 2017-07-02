@@ -1,0 +1,181 @@
+{#
+/**
+ * Edit/create Blueprint template
+ *
+ * @link      	http://therefinery.co.nz
+ * @copyright 	Copyright (c) 2017 The Refinery
+ * @license 	https://github.com/therefinerynz/courier/blob/master/LICENSE.txt
+ * @author 		The Refinery
+ * @package 	Courier
+ * @since 		1.0.0
+ */
+#}
+{% extends 'courier/_layout' %}
+{% import '_includes/forms' as forms %}
+
+{% set crumbs = [
+	{ label: 'Courier'|t, url: url('courier') },
+	{ label: 'Blueprints'|t, url: url('courier/blueprints') },
+] %}
+
+{% set tabs = {
+	blueprint: { label: 'Blueprint'|t, url: '#blueprint' },
+	email: { label: 'Email'|t, url: '#email' },
+	event: { label: 'Event'|t, url: '#event' },
+} %}
+
+{% set fullPageForm = true %}
+
+{% block content %}
+	<input type="hidden" name="action" value="courier/blueprints/save">
+	<input type="hidden" name="redirect" value="courier">
+	{{ getCsrfInput() }}
+	<input type="hidden" name="blueprintId" value="{{ blueprint.id }}">
+	<div id="blueprint">
+		{{ forms.textField({
+			label: 'Name'|t,
+			instructions: 'A unique name for this blueprint.'|t,
+			id: 'name',
+			name: 'name',
+			value: blueprint.name,
+			required: true,
+			autocomplete: true,
+			errors: blueprint.getErrors('name'),
+		}) }}
+		{{ forms.textareaField({
+			label: 'Description'|t,
+			instructions: 'Describe the purpose of this blueprint.'|t,
+			id: 'description',
+			name: 'description',
+			value: blueprint.description,
+			autocomplete: true,
+			errors: blueprint.getErrors('description'),
+		}) }}
+		{{ forms.textField({
+			label: 'HTML Email Template Path'|t,
+			instructions: 'The template to be used for HTML emails.'|t,
+			id: 'htmlEmailTemplatePath',
+			name: 'htmlEmailTemplatePath',
+			value: blueprint.htmlEmailTemplatePath,
+			required: true,
+			autocomplete: true,
+			errors: blueprint.getErrors('htmlEmailTemplatePath'),
+		}) }}
+		{{ forms.textField({
+			label: 'Text Email Template Path'|t,
+			instructions: 'The template to be used for plain text emails.'|t,
+			id: 'textEmailTemplatePath',
+			name: 'textEmailTemplatePath',
+			value: blueprint.textEmailTemplatePath,
+			autocomplete: true,
+			errors: blueprint.getErrors('textEmailTemplatePath'),
+		}) }}
+		{{ forms.lightswitchField({
+			label: 'Enabled?'|t,
+			id: 'enabled',
+			name: 'enabled',
+			value: 1,
+			on: blueprint.enabled,
+			errors: blueprint.getErrors('enabled'),
+		}) }}
+	</div>
+	<div id="email" class="hidden">
+		{{ forms.textField({
+			label: 'Email Subject'|t,
+			id: 'emailSubject',
+			name: 'emailSubject',
+			value: blueprint.emailSubject,
+			required: true,
+			autocomplete: true,
+			errors: blueprint.getErrors('emailSubject'),
+		}) }}
+		{{ forms.textField({
+			label: 'To Name'|t,
+			instructions: 'The name of the email recipient.'|t,
+			id: 'toName',
+			name: 'toName',
+			value: blueprint.toName,
+			autocomplete: true,
+			errors: blueprint.getErrors('toName'),
+		}) }}
+		{{ forms.textField({
+			label: 'To Email'|t,
+			instructions: 'The email address of the email recipient.'|t,
+			id: 'toEmail',
+			name: 'toEmail',
+			value: blueprint.toEmail,
+			autocomplete: true,
+			errors: blueprint.getErrors('toEmail'),
+		}) }}
+		{{ forms.textField({
+			label: 'From Name'|t,
+			instructions: 'The name of the email sender.'|t,
+			id: 'fromName',
+			name: 'fromName',
+			value: blueprint.fromName,
+			autocomplete: true,
+			errors: blueprint.getErrors('fromName'),
+		}) }}
+		{{ forms.textField({
+			label: 'From Email'|t,
+			instructions: 'The email address of the email sender.'|t,
+			id: 'fromEmail',
+			name: 'fromEmail',
+			value: blueprint.fromEmail,
+			required: true,
+			autocomplete: true,
+			errors: blueprint.getErrors('fromEmail'),
+		}) }}
+		{{ forms.textField({
+			label: 'Reply To Email'|t,
+			instructions: 'The reply to email address.'|t,
+			id: 'replyToEmail',
+			name: 'replyToEmail',
+			value: blueprint.replyToEmail,
+			autocomplete: true,
+			errors: blueprint.getErrors('replyToEmail'),
+		}) }}
+		{{ forms.textField({
+			label: "CC Email(s)"|t,
+			instructions: 'The email address(es) of the CC\'d email recipient(s).'|t,
+			id: 'ccEmail',
+			name: 'ccEmail',
+			value: blueprint.ccEmail,
+			autocomplete: true,
+			errors: blueprint.getErrors('ccEmail'),
+		}) }}
+		{{ forms.textField({
+			label: "BCC Email(s)"|t,
+			instructions: 'The email address(es) of the BCC\'d email recipient(s).'|t,
+			id: 'bccEmail',
+			name: 'bccEmail',
+			value: blueprint.bccEmail,
+			autocomplete: true,
+			errors: blueprint.getErrors('bccEmail'),
+		}) }}
+	</div>
+	<div id="event" class="hidden">
+		{{ forms.checkboxSelectField({
+			label: 'Event Triggers'|t,
+			instructions: "Choose which events will trigger this blueprint's email to be sent."|t,
+			name: 'eventTriggers',
+			id: 'eventTriggers',
+			values: blueprint.eventTriggers,
+			options: craft.courier.availableEvents,
+			showAllOption: false,
+			required: true,
+			errors: blueprint.getErrors('eventTriggers'),
+		}) }}
+		{{ forms.textareaField({
+			label: "Event Trigger Conditions"|t,
+			class: "textarea-code",
+			instructions: 'Optional Twig conditions to run after a watched event is fired. Have this field\'s code evaluate to a single <code>true</code> if you want the event to trigger the blueprint\'s email. Have it evaluate to a single <code>false</code> if the blueprint should ignore the event.'|t,
+			id: 'eventTriggerConditions',
+			name: 'eventTriggerConditions',
+			rows: 5,
+			value: blueprint.eventTriggerConditions,
+			errors: blueprint.getErrors('eventTriggerConditions'),
+			required: true
+		}) }}
+	</div>
+{% endblock %}

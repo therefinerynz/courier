@@ -1,0 +1,101 @@
+{#
+/**
+ * Deliveries index template
+ *
+ * @link      	http://therefinery.co.nz
+ * @copyright 	Copyright (c) 2017 The Refinery
+ * @license 	https://github.com/therefinerynz/courier/blob/master/LICENSE.txt
+ * @author 		The Refinery
+ * @package 	Courier
+ * @since 		1.0.0
+ */
+#}
+{% extends "courier/_layout" %}
+
+{% set tabs = {
+	blueprints: { label: 'Blueprints'|t, url: url('courier') },
+	deliveries: { label: 'Deliveries'|t, url: url('courier/deliveries') }
+} %}
+
+{% set selectedTab = 'deliveries' %}
+
+{% block content %}
+	<h2>{{ "Deliveries"|t }}</h2>
+	<p id="no-deliveries"{% if deliveries|length %} class="hidden"{% endif %}>
+		{{ "No deliveries have been recorded at this time."|t }}
+	</p>
+	{% if deliveries|length %}
+		<div id="has-deliveries">
+			{% import "_includes/forms" as forms %}
+			<form class="courier-toolbar--right" method="post" action="" accept-charset="UTF-8">
+				{{ getCsrfInput() }}
+				<input type="hidden" name="redirect" value="courier/deliveries">
+				<input type="hidden" name="action" value="courier/deliveries/deleteAll">
+				<input type="submit" class="btn submit" value="Clear All">
+			</form>
+			<table class="data fullwidth" id="deliveries">
+				<thead>
+					<tr>
+						<th>{{ 'Blueprint'|t }}</th>
+						<th>{{ 'Recipients'|t }}</th>
+						<th>{{ 'Success?'|t }}</th>
+						<th>{{ 'Error'|t }}</th>
+						<th>{{ 'Sent At'|t }}</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for delivery in deliveries %}
+						{% set blueprint = delivery.blueprint %}
+						{% set createdAt = delivery.dateCreated|date('d/m/y H:i:s T') %}
+						<tr class="delivery-tr"
+							data-id="{{ delivery.id }}"
+							data-name="{{ 'Delivery for {blueprint} attempted at {createdAt}'|t({
+								blueprint: blueprint.name,
+								createdAt: createdAt,
+							}) }}">
+							<th data-title="Blueprint">
+								<a href="{{ url('courier/blueprints/' ~ delivery.blueprintId )}}">{{ blueprint.name }}</a>
+							</th>
+							<td data-title="Recipients">{{ delivery.toEmail }}</td>
+							<td data-title="Success?">{{ delivery.success ? 'True' : 'False' }}</td>
+							<td data-title="Errors">
+								{% if delivery.errorMessages %}
+									<a role="button" class="error-button" aria-controls="delivery-{{ delivery.id }}-error">{{ 'Show errors'|t }}</a>
+									<div class="error" style="display: none;" id="delivery-{{ delivery.id }}-error">
+										<p>{{ delivery.errorMessages|nl2br }}</p>
+									</div>
+								{% else %}
+									None
+								{% endif %}
+							</td>
+							<td data-title="Date of send">{{ createdAt }}</td>
+							<td class="thin"><a class="delete icon" title="Delete" role="button"></a></td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	{% endif %}
+{% endblock %}
+
+{% includejs %}
+	$('.error-button').on('click', function(e) {
+		var errorModal = new Garnish.Modal($(
+			'<div class="modal courier-modal"><div class="courier-modal__wrapper"><h2 class="courier-modal__header">Error:</h2><p>' +
+			$(this).siblings('.error').html() +
+			'</p></div></div>'
+		));
+	});
+	var adminTable = new Craft.AdminTable({
+		tableSelector: '#deliveries',
+		noObjectsSelector: '#no-deliveries',
+		deleteAction: 'courier/deliveries/delete',
+		onDeleteItem: function() {
+			if (adminTable.totalItems == 0) {
+				$('#has-deliveries').remove();
+				$('#no-deliveries').show().removeClass('hidden');
+			}
+		}
+	});
+{% endincludejs %}

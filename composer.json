@@ -1,0 +1,14 @@
+{
+	"name": "therefinery/courier",
+	"description": "Manage the automated deliveries of custom emails, triggered by certain pre-determined events.",
+	"type": "craft-plugin",
+	"authors": [
+		{
+			"name": "The Refinery",
+			"homepage": "http://therefinery.co.nz"
+		}
+	],
+	"require": {
+		"composer/installers": "~1.0"
+	}
+}

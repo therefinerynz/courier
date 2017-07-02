@@ -1,0 +1,25 @@
+{#
+/**
+ * Base layout template
+ *
+ * @link      	http://therefinery.co.nz
+ * @copyright 	Copyright (c) 2017 The Refinery
+ * @license 	https://github.com/therefinerynz/courier/blob/master/LICENSE.txt
+ * @author 		The Refinery
+ * @package 	Courier
+ * @since 		1.0.0
+ */
+#}
+{% extends '_layouts/cp' %}
+
+{% includeCssResource "courier/css/Courier_Style.css" %}
+
+{# Link for the ? icon at the bottom of the page #}
+{% set docsUrl = 'https://github.com/therefinerynz/courier/blob/master/README.md' %}
+
+{# The title of this CP section #}
+{% set title = title is defined ? title : 'Courier' %}
+
+{% set content %}
+	{% block content %}{% endblock %}
+{% endset %}

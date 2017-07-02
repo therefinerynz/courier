@@ -1,0 +1,43 @@
+{#
+/**
+ * Settings template
+ *
+ * @link      	http://therefinery.co.nz
+ * @copyright 	Copyright (c) 2017 The Refinery
+ * @license 	https://github.com/therefinerynz/courier/blob/master/LICENSE.txt
+ * @author 		The Refinery
+ * @package 	Courier
+ * @since 		1.0.0
+ */
+#}
+{% import "_includes/forms" as forms %}
+
+{% includeCssResource "courier/css/Courier_Style.css" %}
+
+{{ forms.editableTableField({
+	label: 'Available Events'|t,
+	instructions: 'The events that all blueprints will have the option of listening for. See Craft\'s <a href="https://craftcms.com/docs/plugins/events-reference">events reference</a> as a starting point.',
+	id: 'availableEvents',
+	name: 'availableEvents',
+	cols: {
+		'event': {
+			'heading': 'Event',
+			'type': 'singleline'
+		},
+		'enabled': {
+			'heading': 'Enable as option?',
+			'type': 'checkbox'
+		}
+	},
+	rows: settings.availableEvents
+}) }}
+
+{{ forms.textField({
+	label: 'Deliveries Record Limit'|t,
+	instructions: 'The maximum number of sent blueprint deliveries that Courier should keep record of at once.'|t,
+	name: 'deliveriesRecordLimit',
+	id: 'deliveriesRecordLimit',
+	type: 'number',
+	maxLength: 4,
+	value: settings.deliveriesRecordLimit
+}) }}
