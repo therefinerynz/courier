@@ -2,7 +2,7 @@
 
 Manage the automated delivery of custom emails, triggered by certain pre-determined events and conditions.
 
-![Screenshot](resources/screenshots/courier_blueprints.png)
+![Screenshot](courier/resources/screenshots/courier_blueprints.png)
 
 ## Requirements
 
@@ -35,7 +35,7 @@ Courier is a [Craft CMS](http://craftcms.com/) plugin that allows you to create 
 ## Settings
 From the plugin settings page you can define which events you might watch for when setting up your Blueprints, and how many delivery records should be retained.
 
-![Screenshot](resources/screenshots/courier_plugin-settings.png)
+![Screenshot](courier/resources/screenshots/courier_plugin-settings.png)
 
 ### Craft CMS Email Settings
 
@@ -79,7 +79,7 @@ Twig conditions to run after a watched event is fired.
 
 You might have the Guest Entries plugin set up to accept front end submissions from guests, and save entries to a section with an ID of `11`.  The screenshot below provides and example of how a Blueprint might be set up to send an email when a new entry is created in that section:
 
-![Screenshot](resources/screenshots/courier_plugin_enquiry-alert--triggerconditions.png)
+![Screenshot](courier/resources/screenshots/courier_plugin_enquiry-alert--triggerconditions.png)
 
 ## TODO
 
